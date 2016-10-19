@@ -3,19 +3,19 @@ var Schema = mongoose.Schema;
 
 /* both oriented and non-oriented edge, depending on how you evaluate it */
 var edgeSchema = new Schema({
+    id: String,
     color: String,
     label: String,
     source: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vertex',
+        type: String,
         required: true
     },
     target: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vertex',
+        type: String,
         required: true
     },
-    weight: Number
+    weight: Number,
+    step: Number // iteration loop
 });
 
 module.exports = mongoose.model('Edge', edgeSchema);
