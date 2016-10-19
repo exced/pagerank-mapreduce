@@ -1,0 +1,14 @@
+{
+  "name": "pagerank-mapreduce",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "gen": "node methods/genDatas.js",
+    "remove": "node methods/removeDatas.js"
+  },    
+  "devDependencies": {
+    "mongoose": "^4.6.1",
+    "uuid": "^2.0.3"
+  }
+}
