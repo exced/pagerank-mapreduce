@@ -14,8 +14,7 @@ var edgeSchema = new Schema({
         type: String,
         required: true
     },
-    weight: Number,
-    step: Number // iteration loop
+    weight: Number
 });
 
 module.exports = mongoose.model('Edge', edgeSchema);

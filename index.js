@@ -4,23 +4,32 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var mongoose = require('mongoose');
 
-/*
-var Edge = require('./models/edge');
-var Vertex = require('./models/vertex');
-    
+//var Edge = require('./models/edge');
+//const Vertex = require('./models/vertex');
+/*    
       var vertexPromise = Vertex.find().exec();
       vertexPromise.then(function (vertexes) {
         vertexes.forEach(function addVertex(elt, index, arr){
           nodes.push({data: {id: vertex.id}})
         });
-*/        
+*/
 
 var Test = React.createClass({
 
-  render: function () { 
+  render: function () {
 
     var nodes = [];
     var edges = [];
+
+
+    /* find */
+    /*
+    Edge.find(query, function (err, edges) {
+      if (err) throw err;
+
+      console.log(JSON.stringify(edges));
+    });*/
+    
 
     var cy = cytoscape({
       container: document.getElementById('cy'),
@@ -92,7 +101,8 @@ var Test = React.createClass({
     // kick off first highlight
     highlightNextEle();
 
-  } 
+    return;
+  }
 });
 
 ReactDOM.render(
