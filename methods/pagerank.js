@@ -13,20 +13,13 @@ mongoose.connection.on('open', function (err) {
 });
 
 /* defining helper fonctions */
-function getEdges() {
-    /*
-    this.Edge.find({}, function (err, edges) {
-        if (err) throw err;
-
-        return (JSON.stringify(edges));
-    });
-    */
+function helper() {
+    return 2;
 }
 
 /*
 * pagerank algorithm with mapReduce
 */
-var o = {};
 /*
 PSEUDOCODE
 map( key: [url, pagerank], value: outlink_list )
@@ -49,6 +42,7 @@ reducer( key: url, value: list_pr_or_urls )
 
     emit( key: [url, pagerank], value: outlink_list )
 */
+var o = {};
 o.map = function () {
     for (var i = 0, len = this.outlinkList.length; i < len; i++) {
         elt = this.outlinkList[i];
@@ -59,16 +53,23 @@ o.map = function () {
 o.reduce = function (k, vals) {
     var outlinkList = [];
     var pagerank = 0;
-    for (var i = 0, len = vals.length; i < len; i++){
-        if (vals[i].isArray)
-            outlinkList = vals[i]; 
+    for (var i = 0, len = vals.length; i < len; i++) {
+        if (vals[i] instanceof Array)
+            outlinkList = vals[i];
         else
             pagerank += vals[i];
     }
-    pagerank = 1 - DAMPING_FACTOR*(1 + pagerank);
-    return {key: [k, pagerank], value: outlinkList};
+    pagerank = 1 - DAMPING_FACTOR * (1 + pagerank);
+    return { key: [k, pagerank], value: outlinkList };
 };
-o.scope = { getEdges: new mongoose.mongo.Code(getEdges.toString()) }
+o.scope = { helper: new mongoose.mongo.Code(helper.toString()) }
+o.finalize = function (key, value) {
+    if (typeof (value) != "number")
+        value = 1;
+
+    return value;
+};
+o.out = { "inline": 1 };
 Vertex.mapReduce(o, function (err, results) {
     if (err) throw err;
     console.log(results)
