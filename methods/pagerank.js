@@ -20,23 +20,6 @@ function getDampingFactor() {
 /*
 * pagerank algorithm with mapReduce
 */
-/*
-map( key: [url, pagerank], value: outlink_list )
-for each outlink in outlink_list
-    emit( key: outlink, value: pagerank/size(outlink_list) )
-emit( key: url, value: outlink_list )
-
-reducer( key: url, value: list_pr_or_urls )
-outlink_list = []
-pagerank = 0
-for each pr_or_urls in list_pr_or_urls
-if is_list( pr_or_urls )
-    outlink_list = pr_or_urls
-else
-    pagerank += pr_or_urls
-pagerank = 1 - DAMPING_FACTOR + ( DAMPING_FACTOR * pagerank )
-emit( key: [url, pagerank], value: outlink_list )
-*/
 var o = {};
 o.map = function () {
     for (var i = 0, len = this.outlinkList.length; i < len; i++) {
