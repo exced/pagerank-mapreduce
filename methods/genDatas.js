@@ -13,36 +13,43 @@ mongoose.connection.on('open', function (err) {
 /* inserting edges ... */
 var edges = [
     {
+        id: 'n1-n2',
         source: 'n1',
         target: 'n2',
         weight: 0.1   
     },
     {
+        id: 'n1-n4',
         source: 'n1',
         target: 'n4',
         weight: 0.1
     },
     {
+        id: 'n5-n1',
         source: 'n5',
         target: 'n1',
         weight: 0.066
     },
     {
+        id: 'n2-n5',
         source: 'n2',
         target: 'n5',
         weight: 0.1
     },
     {
+        id: 'n5-n2',
         source: 'n5',
         target: 'n2',
         weight: 0.066
     },
     {
+        id: 'n2-n3',
         source: 'n2',
         target: 'n3',
         weight: 0.1
     },
     {
+        id: 'n5-n3',
         source: 'n5',
         target: 'n3',
         weight: 0.066
