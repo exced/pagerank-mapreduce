@@ -27,7 +27,7 @@ tail -f /usr/local/var/log/mongodb/mongo.log
 ```
 
 Otherwise you can specify the log file path when starting mongo daemon (mongod) process 
-``bash
+```bash
 mongod --logpath D:\path\to\log.txt
 ```
 
