@@ -2,8 +2,6 @@ var mongoose = require('mongoose');
 var Page = require('../models/page');
 config = require('../config/database');
 
-const DAMPING_FACTOR = 0.85;
-
 /* mongoDB connection */
 mongoose.connect(config.database);
 
@@ -17,7 +15,7 @@ mongoose.connection.on('open', function (err) {
 * represents the probability of the user to stay on a page and click on links
 */
 function getDampingFactor() {
-    return this.DAMPING_FACTOR;
+    return 0.85;
 }
 
 /*
@@ -42,22 +40,14 @@ for (var i = 1; i < 20; i++) {
                 pagerank += vals[i];
         }
         pagerank = 1 - getDampingFactor() + getDampingFactor() * pagerank;
-        print("REDUCE " + JSON.stringify({ key: [k, pagerank], value: links }));
-        return { key: [k, pagerank], value: links };
+        return { page: [k, pagerank], links: links };
     };
     o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
-    o.finalize = function (key, value) {
-        if (typeof (value) != "number")
-            value = 1;
-
-        return value;
-    };
     o.out = { "inline": 1 };
-
     Page.mapReduce(o, function (err, results) {
         if (err) throw err;
-        console.log("iITERATION I : " + i);
-        console.log(results)
+        console.log("IITERATION I : " + i);
+        console.log(JSON.stringify(results));
     });
 }
 
