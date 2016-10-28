@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Vertex = require('../models/vertex');
+var Page = require('../models/page');
 config = require('../config/database');
 
 const DAMPING_FACTOR = 0.85;
@@ -12,6 +12,10 @@ mongoose.connection.on('open', function (err) {
 });
 
 /* defining helper fonctions */
+/*
+* return the damping factor of pagerank algorithm
+* represents the probability of the user to stay on a page and click on links
+*/
 function getDampingFactor() {
     return this.DAMPING_FACTOR;
 }
@@ -23,23 +27,23 @@ for (var i = 1; i < 20; i++) {
     
     var o = {};
     o.map = function () {
-        for (var i = 0, len = this.outlinkList.length; i < len; i++) {
-            elt = this.outlinkList[i];
-            emit(elt.id, elt.weight / len);
+        for (var i = 0, len = this.links.length; i < len; i++) {
+            emit(this.links[i], this.pg / len);
         }
-        emit(this.id, this.outlinkList);
+        emit(this.url, this.links);
     };
     o.reduce = function (k, vals) {
-        var outlinkList = [];
-        var pagerank = 0;
+        var links = [];
+        var pagerank = 0.0;
         for (var i = 0, len = vals.length; i < len; i++) {
             if (vals[i] instanceof Array)
-                outlinkList = vals[i];
+                links = vals[i];
             else
                 pagerank += vals[i];
         }
         pagerank = 1 - getDampingFactor() + getDampingFactor() * pagerank;
-        return { key: [k, pagerank], value: outlinkList };
+        print("REDUCE " + JSON.stringify({ key: [k, pagerank], value: links }));
+        return { key: [k, pagerank], value: links };
     };
     o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
     o.finalize = function (key, value) {
@@ -50,7 +54,7 @@ for (var i = 1; i < 20; i++) {
     };
     o.out = { "inline": 1 };
 
-    Vertex.mapReduce(o, function (err, results) {
+    Page.mapReduce(o, function (err, results) {
         if (err) throw err;
         console.log("iITERATION I : " + i);
         console.log(results)

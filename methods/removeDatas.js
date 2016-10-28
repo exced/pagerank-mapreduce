@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 config = require('../config/database');
-var Vertex = require('../models/vertex');
+var Page = require('../models/page');
 
 /* mongoDB connection */
 mongoose.connect(config.database);
@@ -9,10 +9,10 @@ mongoose.connection.on('open', function (err) {
     if (err) throw err;
 });
 
-/* drop Vertex collection for this exercize */
-Vertex.remove({}, function (err) {
+/* drop Page collection for this exercize */
+Page.remove({}, function (err) {
     if (err) throw err;
-    console.log('Vertex collection removed')
+    console.log('Page collection removed')
 });
 
 mongoose.connection.close();

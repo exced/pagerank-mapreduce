@@ -12,32 +12,32 @@ mongoose.connection.on('open', function (err) {
 const NUM_PAGES = 4;
 
 /* defining pages ... */
-var vertexes = [
+var pages = [
     {
-        id: 'A',
-        weight: 1 / NUM_VERTEXES,
-        outlinkList: [{id:'B',weight:0.25},{id:'C',weight:0.25}]
+        url: 'A',
+        pg: 1 / NUM_PAGES,
+        links: ['B','C']
     },
     {
-        id: 'B',
-        weight: 0.25,
-        outlinkList: [{id:'C',weight:0.25}]
+        url: 'B',
+        pg: 1 / NUM_PAGES,
+        links: ['C']
     },
     {
-        id: 'C',
-        weight: 0.25,
-        outlinkList: [{id:'A',weight:0.25}]
+        url: 'C',
+        pg: 1 / NUM_PAGES,
+        links: ['A']
     },
     {
-        id: 'D',
-        weight: 0.25,
-        outlinkList: [{id:'C',weight:0.25}]
+        url: 'D',
+        pg: 1 / NUM_PAGES,
+        links: ['C']
     }
 ];
 
-/* save vertexes ... */
-vertexes.forEach(function saveVertex(elt, index, array) {
-   Vertex(elt).save(function (err, newVertex) {
+/* save pages ... */
+pages.forEach(function savePages(elt, index, array) {
+   Page(elt).save(function (err, newPage) {
         if (err) throw err;
     });
 });
