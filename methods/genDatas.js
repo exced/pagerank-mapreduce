@@ -34,22 +34,22 @@ const NUM_PAGES = 4;
 var pages = [
     {
         url: 'A',
-        pg: 1 / NUM_PAGES,
+        pg: 1 ,
         links: ['B', 'C']
     },
     {
         url: 'B',
-        pg: 1 / NUM_PAGES,
+        pg: 1 ,
         links: ['C']
     },
     {
         url: 'C',
-        pg: 1 / NUM_PAGES,
+        pg: 1 ,
         links: ['A']
     },
     {
         url: 'D',
-        pg: 1 / NUM_PAGES,
+        pg: 1 ,
         links: ['C']
     }
 ];

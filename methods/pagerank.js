@@ -21,35 +21,38 @@ function getDampingFactor() {
 /*
 * pagerank algorithm with mapReduce
 */
-for (var i = 1; i < 20; i++) {
-    
-    var o = {};
-    o.map = function () {
-        for (var i = 0, len = this.links.length; i < len; i++) {
-            emit(this.links[i], this.pg / len);
-        }
-        emit(this.url, this.links);
-    };
-    o.reduce = function (k, vals) {
-        var links = [];
-        var pagerank = 0.0;
-        for (var i = 0, len = vals.length; i < len; i++) {
-            if (vals[i] instanceof Array)
-                links = vals[i];
-            else
-                pagerank += vals[i];
-        }
-        pagerank = 1 - getDampingFactor() + getDampingFactor() * pagerank;
-        return { page: [k, pagerank], links: links };
-    };
-    o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
-    o.out = { "inline": 1 };
-    Page.mapReduce(o, function (err, results) {
-        if (err) throw err;
-        console.log("IITERATION I : " + i);
-        console.log(JSON.stringify(results));
-    });
+var o = {};
+o.map = function () {
+    for (var i = 0, len = this.links.length; i < len; i++) {
+        emit(this.links[i], this.pg / len);
+    }
+    emit(this.url, this.links);
+};
+o.reduce = function (k, vals) {
+    var links = [];
+    var pagerank = 0.0;
+    for (var i = 0, len = vals.length; i < len; i++) {
+        if (vals[i] instanceof Array)
+            links = vals[i];
+        else
+            pagerank += vals[i];
+    }
+    pagerank = 1 - getDampingFactor() + getDampingFactor() * pagerank;
+    return { pagerank: pagerank, links: links };
+};
+o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
+
+function recMapReduce(i, maxIter) {
+    if (i <= maxIter){
+        console.log("ITERATION I : " + i);
+        Page.mapReduce(o, function (err, res) {
+            if (err) throw err;
+            console.log(res);
+            recMapReduce(i + 1, maxIter);
+        });
+    }
 }
 
+recMapReduce(1,20);
 
 mongoose.connection.close();
