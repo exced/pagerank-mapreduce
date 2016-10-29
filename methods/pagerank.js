@@ -9,7 +9,10 @@ mongoose.connection.on('open', function (err) {
     if (err) throw err;
 });
 
-/* defining helper fonctions */
+/* defining helpers */
+
+/* epsilon */
+const EPS = 10 ^ (-3);
 /*
 * return the damping factor of pagerank algorithm
 * represents the probability of the user to stay on a page and click on links
@@ -23,10 +26,11 @@ function getDampingFactor() {
 */
 var o = {};
 o.map = function () {
-    for (var i = 0, len = this.links.length; i < len; i++) {
-        emit(this.links[i], this.pg / len);
+    for (var i = 0, len = this.value.links.length; i < len; i++) {
+        emit(this.value.links[i], this.value.pg / len);
     }
-    emit(this.url, this.links);
+    emit(this.value.url, 0);
+    emit(this.value.url, this.value.links);
 };
 o.reduce = function (k, vals) {
     var links = [];
@@ -38,21 +42,24 @@ o.reduce = function (k, vals) {
             pagerank += vals[i];
     }
     pagerank = 1 - getDampingFactor() + getDampingFactor() * pagerank;
-    return { pagerank: pagerank, links: links };
+    return { url: k, pg: pagerank, links: links };
 };
 o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
+o.out = { replace: 'pages' }
 
 function recMapReduce(i, maxIter) {
-    if (i <= maxIter){
-        console.log("ITERATION I : " + i);
-        Page.mapReduce(o, function (err, res) {
-            if (err) throw err;
-            console.log(res);
-            recMapReduce(i + 1, maxIter);
-        });
-    }
+    if (i > maxIter)
+        return    
+    Page.mapReduce(o);
+    recMapReduce(i + 1, maxIter)
 }
 
-recMapReduce(1,20);
+recMapReduce(1, 20);
+
+/* print results */
+Page.find(function (err, res) {
+    if (err) throw err;
+    console.log(res);
+});
 
 mongoose.connection.close();

@@ -7,15 +7,14 @@ Using the Node Package Manager
 npm install
 ```  
 
-## Datas
-You have examples of graph to generate in methods folder named 'genDatas' + x.
-Run following to save in mongoDB
+## Run Pagerank
+To prepare databse
 ```bash
-node methods/genDatas.js
-```  
-You can remove all datas with
+npm run build
+```
+To run the pagerank mapreduce algorithm and see the result in terminal
 ```bash
-node methods/removeDatas.js
+npm run start
 ```  
 
 ## Debugging
@@ -29,16 +28,15 @@ tail -f /usr/local/var/log/mongodb/mongo.log
 Otherwise you can specify the log file path when starting mongo daemon (mongod) process 
 ```bash
 mongod --logpath D:\path\to\log.txt
-```
-
-## Run Pagerank
-To run the pagerank mapreduce algorithm and see the result in terminal
-Don't forget to change the number of occurence of mapreduce if you don't want it to run with all datas stored in the Database 
-```bash
-node methods/pagerank.js
 ```  
 
-## Run Graph rendering 
+## Datas
+You have example of graph to generate in methods folder named 'genDatas'.
+Run following to save in mongoDB
 ```bash
-npm start
+node methods/genDatas.js
 ```  
+You can remove all datas with
+```bash
+node methods/removeDatas.js
+``` 
