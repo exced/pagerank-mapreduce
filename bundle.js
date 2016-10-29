@@ -1,1 +1,0 @@
-console.error("Error: Cannot find module '/Users/thomas/Desktop/pagerank-mapreduce/index.js' from '/Users/thomas/Desktop/pagerank-mapreduce'");
