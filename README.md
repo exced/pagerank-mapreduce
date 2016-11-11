@@ -2,9 +2,13 @@
 Pagerank algorithm with mapreduce mongoDB + nodeJS
 
 ## Install
-Using the Node Package Manager
+### Using the Node Package Manager
 ```bash
 npm install
+```
+### Using yarn
+```bash
+yarn install
 ```  
 
 ## Run Pagerank
