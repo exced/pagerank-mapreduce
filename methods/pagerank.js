@@ -48,6 +48,7 @@ o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString(
 o.out = { replace: 'pages' }
 
 function recMapReduce(i, maxIter) {
+    /* should have conv criteria */
     if (i > maxIter)
         return    
     Page.mapReduce(o);
