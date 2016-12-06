@@ -47,15 +47,10 @@ o.reduce = function (k, vals) {
 o.scope = { getDampingFactor: new mongoose.mongo.Code(getDampingFactor.toString()) }
 o.out = { replace: 'pages' }
 
-function recMapReduce(i, maxIter) {
+for (var i = 0; i < 20; i++) {
     /* should have conv criteria */
-    if (i > maxIter)
-        return    
     Page.mapReduce(o);
-    recMapReduce(i + 1, maxIter)
 }
-
-recMapReduce(1, 20);
 
 /* print results */
 Page.find(function (err, res) {
